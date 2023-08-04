@@ -1,6 +1,6 @@
 import:py pygame;
                 #from pygame.locals import *
-include:jac actors;
+include:jac .actors;
 
 g_vars = {};
 g_vars['width'] = 416;
