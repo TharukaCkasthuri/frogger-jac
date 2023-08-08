@@ -1,15 +1,10 @@
+"""Example of simple walker walking nodes."""
+
 import:py pygame;
                 #from pygame.locals import *
 include:jac .actors;
 
-g_vars = {};
-g_vars['width'] = 416;
-g_vars['height'] = 416;
-g_vars['fps'] = 30;
-g_vars['grid'] = 32;
-g_vars['window'] = pygame.display.set_mode(
-    [g_vars['width'], g_vars['height']], pygame.HWSURFACE);
-
+global g_vars = {"width": 416, "height": 416, "fps": 30 , "grid": 32, 'window': pygame.display.set_mode([416, 416], pygame.HWSURFACE)};
 
 object App{
     can init(){
@@ -35,7 +30,7 @@ object App{
         <self>.frog.attach(None);
         <self>.score = Score();
 
-        <self>.lanes = []
+        <self>.lanes = [];
         <self>.lanes.append(Lane(1, c=(50, 192, 122)));
 
         <self>.lanes.append(Lane(2, t='log', c=(153, 217, 234),
@@ -69,14 +64,15 @@ object App{
         <self>.lanes.append(Lane(12, c=(50, 192, 122)));
     }
 
-    can event(event){
-        if event.type == QUIT{
+    can event(events:list){
+        for event in events{
+            if (event.type == QUIT){
             <self>.running = False;
-        }
+            }
 
-        if event.type == KEYDOWN and event.key == K_ESCAPE{
+            if event.type == KEYDOWN and event.key == K_ESCAPE{
             <self>.running = False;
-        }
+            }
             
         if <self>.state == 'START'{
             if event.type == KEYDOWN and event.key == K_RETURN{
@@ -97,7 +93,8 @@ object App{
             if event.type == KEYDOWN and event.key == K_DOWN{
                 <self>.frog.move(0, 1);
             }  
-        }          
+        }        
+        }    
     }
 
 
@@ -107,7 +104,6 @@ object App{
         }
 
         lane_index = <self>.frog.y; # g_vars['grid'] - 1
-.
         if <self>.lanes[lane_index].check(self.frog){
             <self>.score.lives -= 1;
             <self>.score.score = 0;
@@ -115,22 +111,22 @@ object App{
 
         <self>.frog.update();
 
-        if (g_vars['height']-self.frog.y){ #g_vars['grid'] > self.score.high_lane:
-            if <self>.score.high_lane == 11:{
+        if (g_vars["height"] - <self>.frog.y){ #g_vars['grid'] > self.score.high_lane:
+            if (<self>.score.high_lane == 11){
                 <self>.frog.reset();
                 <self>.score.update(200);
             }
             else{
                 <self>.score.update(10);
                 <self>.score.high_lane = (
-                    g_vars['height']-self.frog.y); //g_vars['grid']
+                    g_vars["height"]-self.frog.y); //g_vars['grid']
             } 
         }
 
-        if self.score.lives == 0{
+        if (self.score.lives == 0){
             <self>.frog.reset();
             <self>.score.reset();
-            <self>.state = 'START';
+            <self>.state = "START";
         }     
     }
 
@@ -169,9 +165,7 @@ object App{
             <self>.running = False;
         }
         while <self>.running{
-            for event in pygame.event.get(){
-                <self>.event(event);
-            }
+            <self>.event(pygame.event.get())
             <self>.update();
             <self>.draw();
             <self>.clock.tick(g_vars['fps']);
