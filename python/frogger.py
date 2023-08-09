@@ -11,15 +11,7 @@ Source: https://www.youtube.com/user/shiffman
 import pygame
 from actors import *
 
-
-g_vars = {}
-g_vars['width'] = 416
-g_vars['height'] = 416
-g_vars['fps'] = 30
-g_vars['grid'] = 32
-g_vars['window'] = pygame.display.set_mode(
-    [g_vars['width'], g_vars['height']], pygame.HWSURFACE)
-
+g_vars = {"width": 416, "height": 416, "fps": 30 , "grid": 32, 'window': pygame.display.set_mode([416, 416], pygame.HWSURFACE)};
 
 class App:
 
@@ -42,6 +34,7 @@ class App:
 
         self.frog = Frog(g_vars['width']/2 - g_vars['grid']/2,
                          12 * g_vars['grid'], g_vars['grid'])
+        print(self.frog.y)
         self.frog.attach(None)
         self.score = Score()
 
@@ -75,7 +68,7 @@ class App:
             self.running = False
 
         if self.state == 'START':
-            if event.type == KEYDOWN and event.key == K_RETURN:
+            if event.type == pygame.KEYDOWN and event.key == K_RETURN:
                 self.state = 'PLAYING'
 
         if self.state == 'PLAYING':
@@ -137,6 +130,11 @@ class App:
         pygame.display.flip()
 
     def draw_text(self, t, x, y, a):
+        print("t",str(type(t)))
+        print("x",str(type(x)))
+        print("y",str(type(y)))
+        print("a",str(type(a)))
+        
         text = self.font.render(t, False, (255, 255, 255))
         if a == 'center':
             x -= text.get_rect().width / 2

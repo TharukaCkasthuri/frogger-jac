@@ -26,17 +26,17 @@ class Rectangle:
         self.h = h
 
     def intersects(self, other):
-        left = self.x
-        top = self.y
-        right = self.x + self.w
-        bottom = self.y + self.h
+        left1 = self.x
+        top1 = self.y
+        right1 = self.x + self.w
+        bottom1 = self.y + self.h
 
-        oleft = other.x
-        otop = other.y
-        oright = other.x + other.w
-        obottom = other.y + other.h
+        left2 = other.x
+        top2 = other.y
+        right2 = other.x + other.w
+        bottom2 = other.y + other.h
 
-        return not (left >= oright or right <= oleft or top >= obottom or bottom <= otop)
+        return not (left1 >= right2 or right1 <= left2 or top1 >= bottom2 or bottom1 <= top2)
 
 class Frog(Rectangle):
 
@@ -53,10 +53,11 @@ class Frog(Rectangle):
         self.attach(None)
 
     def move(self, xdir, ydir):
+        print(xdir,ydir)
         self.x += xdir * g_vars['grid']
         self.y += ydir * g_vars['grid']
 
-    def attach(self, obstacle):
+    def attach(self, obstacle=None):
         self.attached = obstacle
 
     def update(self):
@@ -99,13 +100,15 @@ class Obstacle(Rectangle):
 
 class Lane(Rectangle):
 
-    def __init__(self, y, t='safety', c=None, n=0, l=0, spc=0, spd=0):
+    def __init__(self, y, t='safety', c:tuple=None, n=0, l=0, spc=0, spd=0):
         super(Lane, self).__init__(
             0, y * g_vars['grid'], g_vars['width'], g_vars['grid'])
+
         self.type = t
         self.color = c
         self.obstacles = []
         offset = 0  # random.uniform(0, 200)
+
         if self.type == 'car':
             o_color = (128, 128, 128)
         if self.type == 'log':
@@ -117,7 +120,7 @@ class Lane(Rectangle):
     def check(self, frog):
         checked = False
         attached = False
-        frog.attach(None)
+        frog.attach()
         for obstacle in self.obstacles:
             if frog.intersects(obstacle):
                 if self.type == 'car':
