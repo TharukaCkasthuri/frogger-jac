@@ -23,8 +23,7 @@ object Rectangle{
         top2 = other.y;
         right2 = other.x + other.w;
         bottom2 = other.y + other.h;
-
-        report not (left1 >= right2 or right1 <= left2 or top1 >= bottom2 or bottom1 <= top2);
+        return not (left1 >= right2 or right1 <= left2 or top1 >= bottom2 or bottom1 <= top2);
 }
 }
 
@@ -49,7 +48,7 @@ object Frog:Rectangle{
         <self>.y += ydir * g_vars['grid'];
     }
 
-    can attach(obstacle:actors.Obstacle){
+    can attach(obstacle:actors.Obstacle=None){
         <self>.attached = obstacle;
     }
 
@@ -104,16 +103,16 @@ object Obstacle:Rectangle{
 object Lane:Rectangle{
     can <init>(y:int, t:str='safety', c:tuple=None, n:int=0, l:int=0, spc:int=0, spd:int=0){
         <super>.<init>(0, y * g_vars['grid'], g_vars['width'], g_vars['grid']);
-        <self>.<>type = t;
+        <self>.item = t;
         <self>.color = c;
         <self>.obstacles = [];
 
         offset = 0;
 
-        if <self>.<>type == 'car'{
+        if <self>.item == 'car'{
             o_color = (128, 128, 128);
         } 
-        if <self>.<>type == 'log'{
+        if <self>.item == 'log'{
             o_color = (185, 122, 87);
         }        
         for i in range(n){
@@ -125,23 +124,22 @@ object Lane:Rectangle{
     can check(frog:actors.Frog){
         checked = False;
         attached = False;
-        frog.attach(None);
-
+        frog.attach();
         for obstacle in <self>.obstacles{
             if frog.intersects(obstacle){
-                if <self>.<>type == "car"{
+                if <self>.item == "car"{
                     frog.reset();
                     checked = True;
                 }
 
-                if <self>.<>type == "log"{
+                if <self>.item == "log"{
                     attached = True;
                     frog.attach(obstacle);
                 }
             }
         }
 
-        if not attached and <self>.<>type == "log"{
+        if not attached and <self>.item == "log"{
             frog.reset();
             checked = True;
         }

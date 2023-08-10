@@ -34,7 +34,7 @@ class App:
 
         self.frog = Frog(g_vars['width']/2 - g_vars['grid']/2,
                          12 * g_vars['grid'], g_vars['grid'])
-        print(self.frog.y)
+        
         self.frog.attach(None)
         self.score = Score()
 
@@ -86,6 +86,7 @@ class App:
             lane.update()
 
         lane_index = self.frog.y // g_vars['grid'] - 1
+        print(lane_index)
         if self.lanes[lane_index].check(self.frog):
             self.score.lives -= 1
             self.score.score = 0

@@ -27,6 +27,7 @@ object App{
 
         <self>.frog = Frog(g_vars['width']/2 - g_vars['grid']/2,
                          12 * g_vars['grid'], g_vars['grid']);
+
         <self>.frog.attach(None);
         <self>.score = Score();
 
@@ -102,7 +103,7 @@ object App{
         }
 
         lane_index = <self>.frog.y//g_vars['grid'] - 1;
-        if <self>.lanes[lane_index].check(self.frog){
+        if <self>.lanes[lane_index].check(<self>.frog){
             <self>.score.lives -= 1;
             <self>.score.score = 0;
         }
